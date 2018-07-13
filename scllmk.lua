@@ -9,8 +9,8 @@
 -- This package is distributed under the MIT License. 
 -- 
 prog_name = 'scllmk'
-version = '0.2.0'
-mod_date = "2018-07-12"
+version = '0.3.0'
+mod_date = "2018-07-13"
 ---------------------------------------- global parameters
 verbose = 0
 in_files = nil
@@ -80,7 +80,7 @@ do
 end
 ---------------------------------------- logging
 do
-  local es_ok, es_err, es_err_parse =  0, 1, 2
+  local es_ok, es_err, es_err_parse, es_failure =  0, 1, 2, 3
 
   local function log(level, label, fmt, ...)
     if level and verbose < level then return end
@@ -183,8 +183,9 @@ do
 
   local function run(command)
     info("Running %s", command)
-    local ret = os.execute(command)
-    return (ret == 0 or ret == true)
+    local ok, r1, r2 = os.execute(command)
+    if type(ok) == 'number' then return ok end
+    return (not ok and r2 == 0) and 1 or r2
   end
 
   function process(pname)
@@ -203,17 +204,20 @@ do
     write_whole(tbase..'.tex', make_source(fbase))
     local cmd = "lualatex -halt-on-error -interaction=nonstopmode"..
         " -no-shell-escape "..tbase
-    local ok = run(cmd) and lfs.isfile(tbase..'.pdf')
+    local ces = run(cmd)
+    local ok = (ces == 0) and lfs.isfile(tbase..'.pdf')
     if ok then
       write_whole(pbase..'.pdf', read_whole(tbase..'.pdf'))
       os.remove(pbase..'.log')
     else
-      warn("LaTeX compilation for \"%s\" failed.", pname)
       write_whole(pbase..'.log', read_whole(tbase..'.log'))
     end
 
     for _, v in ipairs{'.tex', '.aux', '.log', '.pdf'} do
       os.remove(tbase..v)
+    end
+    if not ok then
+      abort(es_failure, "Fail running %s (exit code: %s)", cmd, ces)
     end
   end
 
@@ -232,10 +236,10 @@ Options:
   -q, --quiet               Suppress warnings and most error messages.
   -v, --verbose             Print additional information.
   -D, --debug               Activate all debug output (equal to "--debug=all").
-  -dLIST, --debug=LIST      Activate debug output restricted to LIST.
-  -mCOLOR, --muffler=COLOR  Set muffler color
-  -bCOLOR, --back=COLOR     Set background color
-  -fCOLOR, --fore=COLOR     Set foreground color
+  -d CAT, --debug=CAT       Activate debug output restricted to CAT.
+  -m COLOR, --muffler=COLOR Set muffler color.
+  -b COLOR, --back=COLOR    Set background color.
+  -f COLOR, --fore=COLOR    Set foreground color.
 
 Please report bugs to nowhere.
 ]]):format(prog_name))
@@ -298,19 +302,21 @@ This is free software: you are free to change and redistribute it.
     local opt, files = getopt(arg, 'dmfb')
     local action = nil
     for _, key, val in pairs(opt) do
+      local option = ((#key > 1) and '--' or '-')..key
       local function required(val)
-        sure(val ~= true, "no value given for option: %s", key)
+        sure(val and val ~= true, "no value given for option: %s", option)
         return val
       end
       if key == 'h' or key == 'help' then
         action = 'help'
       elseif key == 'V' or key == 'version' then
         action = 'version'
-      elseif key == 'D' or (key == 'debug' and val == 'all') then
+      elseif key == 'D' or
+          (key == 'debug' and (val == 'all' or val == true)) then
         for k in pairs(show_debug) do show_debug[k] = true end
       elseif key == 'd' or key == 'debug' then
         if show_debug[val] ~= nil then show_debug[val] = true
-        else warn("unknown debug category: \"%s\"", required(val))
+        else warn("unknown debug category: %s", val)
         end
       elseif key == 'q' or key == 'quiet' then
         verbose = -1
@@ -323,8 +329,7 @@ This is free software: you are free to change and redistribute it.
       elseif key == 'b' or key == 'back' then
         color.back = sanitize_color(required(val))
       else
-        local h = (#key > 1) and '--' or '-'
-        abort(es_err, "unknown option: %s%s", h, key)
+        abort(es_err, "unknown option: %s", option)
       end
     end
     if action == 'help' then show_usage()
