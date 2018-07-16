@@ -3,6 +3,9 @@ SCllmk: SC-Variant of [llmk] (the Light LaTeX Make)
 
 [llmk]: https://github.com/wtsnjp/llmk
 
+![Snowman Status](https://raw.githubusercontent.com/zr-tex8r/scllmk/badge/snowman-nice-green.png)
+![TeX Status](https://raw.githubusercontent.com/zr-tex8r/scllmk/badge/TeX-are-red.png)
+
 This is yet another *essential* tool for Snowman Comedians. The features of **scllmk** are:
 
 * works solely with texlua,
