@@ -8,7 +8,7 @@ SCllmk: SC-Variant of [llmk] (the Light LaTeX Make)
 
 This is yet another *essential* tool for Snowman Comedians. The features of **scllmk** are:
 
-* works solely with texlua,
+* it works solely with texlua,
 * the source file can be in TOML, YAML, JSON, XML, LaTeX, SATySFi, or
   any other format; or can be free mixture of those formats,
 * the source file even need not exist since the content or existence of the
@@ -16,10 +16,9 @@ This is yet another *essential* tool for Snowman Comedians. The features of **sc
 * no complicated or simplistic configuration, and
 * modern fixed settings (always using LuaTeX!)
 
-
 ## Basic Usage
 
-The basic (but not easiest) way to use **scllmk** is to write arbitrary text to your source file. The text can be written in an arbitrary format.
+The basic (but not easiest) way to use **scllmk** is to write some text to your source file. The text can be written in an arbitrary format.
 
 Here's a very simple example:
 
@@ -27,9 +26,9 @@ Here's a very simple example:
     -----------------
     * list item
     ** nested list item
-    Oops, Markdown doesn't go that way, I suspect....
+    Oops, Markdown doesn't go that way....
 
-Suppose we save this file as `hello.rst`, then run
+Suppose we save this file as `hello.rst`, then running
 
     $ scllmk hello.rst
 
@@ -39,21 +38,27 @@ You can find other example document files in the [examples](./examples) director
 
 ## Advanced Usage
 
-### Using No Files
+### Using no files
 
-Alternatively, you can do without any tiresome work to write source files.
+Alternatively, you can do without any tiresome work of writing source files.
 
 If you run scllmk without any argument, scllmk will assume the target file name is `scllmk.pdf`, and compile (possibly nonexistent) source files to produce that file.
 
     $ scllmk
 
-### Custom Muffler Color
+### Custom muffler color
 
-You can setup custom muffler colors for snowman figures; use the `--muffler` option to specify the name of the muffler color in the form of the “color expression” as defined in the LaTeX xcolor package.
+You can setup custom muffler colors for snowman figures; use the `--muffler` option to specify the name of the muffler color in the “color expression” format as defined in the LaTeX xcolor package.
 
-### For Duck Enthusiasts
+    $ scllmk --muffler="green!50!black"
 
-Because of the author’s personal preference, the *essential* thing will usually come as a snowman, but it is very easy to get duck consequence; name your source file with a string containing `duck`.
+This way is a bit complicated but strong enough allowing you to use any kind of muffler colors.
+
+### For duck enthusiasts
+
+Because of the author’s personal preference, the *essential* thing will usually come as a snowman, but it is very easy to get duck consequence; just name your source file with a string containing `duck`.
+
+    $ scllmk duckument.saty
 
 ## License
 

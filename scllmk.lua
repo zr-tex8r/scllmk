@@ -1,16 +1,16 @@
 #!/usr/bin/env texlua
--- 
--- This is file 'scllmk.lua'. 
--- 
--- Copyright (c) 2018 Takayuki YATO (aka. "ZR") 
---   GitHub:   https://github.com/zr-tex8r 
---   Twitter:  @zr_tex8r 
--- 
--- This package is distributed under the MIT License. 
--- 
+--
+-- This is file 'scllmk.lua'.
+--
+-- Copyright (c) 2018 Takayuki YATO (aka. "ZR")
+--   GitHub:   https://github.com/zr-tex8r
+--   Twitter:  @zr_tex8r
+--
+-- This package is distributed under the MIT License.
+--
 prog_name = 'scllmk'
-version = '0.3.0'
-mod_date = "2018-07-13"
+version = '0.3.1'
+mod_date = "2018-07-29"
 ---------------------------------------- global parameters
 verbose = 0
 in_files = nil
@@ -230,18 +230,19 @@ do
 Usage: %s[.lua] [OPTION...] [FILE...]
 
 Options:
-  -h, --help                Print this help message.
-  -V, --version             Print the version number.
+  -h, --help            Print this help message.
+  -V, --version         Print the version number.
 
-  -q, --quiet               Suppress warnings and most error messages.
-  -v, --verbose             Print additional information.
-  -D, --debug               Activate all debug output (equal to "--debug=all").
-  -d CAT, --debug=CAT       Activate debug output restricted to CAT.
+  -q, --quiet           Suppress warnings and most error messages.
+  -v, --verbose         Print additional information.
+  -D, --debug           Activate all debug output (equal to "--debug=all").
+  -d CAT, --debug=CAT   Activate debug output restricted to CAT.
+
   -m COLOR, --muffler=COLOR Set muffler color.
   -b COLOR, --back=COLOR    Set background color.
   -f COLOR, --fore=COLOR    Set foreground color.
 
-Please report bugs to nowhere.
+Please report bugs to <https://github.com/zr-tex8r/scllmk/issues>.
 ]]):format(prog_name))
     finish()
   end
