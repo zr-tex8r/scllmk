@@ -52,6 +52,10 @@ You can setup custom muffler colors for snowman figures; use the `--muffler` opt
 
     $ scllmk --muffler="green!50!black"
 
+If you use the special color name `random`, then the color will be chosen at random.
+
+    $ scllmk --muffler="random"
+
 This way is a bit complicated but strong enough allowing you to use any kind of muffler colors.
 
 ### For duck enthusiasts
