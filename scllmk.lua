@@ -9,7 +9,7 @@
 -- This package is distributed under the MIT License.
 --
 prog_name = 'scllmk'
-version = '0.3.1'
+version = '0.4.0'
 mod_date = "2018-07-29"
 ---------------------------------------- global parameters
 verbose = 0
@@ -28,6 +28,7 @@ default_name = "scllmk"
 ---------------------------------------- helpers
 require 'lfs'
 unpack = unpack or table.unpack
+random = math.random
 do
 
   function str(val)
@@ -99,6 +100,27 @@ do
   end
 
 end
+---------------------------------------- random color
+do
+  local hue = {
+    {1, 1, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}, {1, 0, 1}, {1, 0, 0}
+  }
+  hue[0] = hue[#hue]
+  function random_color()
+    local c, h = {}, random() * #hue; local hi = math.floor(h)
+    local h0, h1, hf = hue[hi], hue[hi + 1], h - hi
+    for i = 1, 3 do
+      c[i] = (random() * 0.4 + 0.6) * (h0[i] * (1 - hf) + h1[i] * hf)
+    end
+    local y0 = 0.299 * c[1] + 0.587 * c[2] + 0.114 * c[3]
+    local y1 = random() * 0.1 + 0.4
+    for i = 1, 3 do
+      v = c[i] * ((y1 / y0) ^ 0.8)
+      c[i] = (v > 1) and 1 or (v < 0) and 0 or v
+    end
+    return unpack(c)
+  end
+end
 ---------------------------------------- essential source
 do
   local source_snowman = [[
@@ -108,7 +130,7 @@ do
 \usepackage[papersize={100mm,100mm},margin=0mm,noheadfoot]{geometry}
 \usepackage{xcolor,scsnowman,fontspec}
 \setmainfont{IPAexGothic}
-\color{<FORE>}
+<RANDCOLOR>\color{<FORE>}
 \pagecolor{<BACK>}
 \begin{document}
 \fontsize{32pt}{32pt}\selectfont
@@ -130,7 +152,7 @@ do
 \usepackage[papersize={100mm,100mm},margin=0mm,noheadfoot]{geometry}
 \usepackage{graphicx,xcolor,tikzducks,fontspec}
 \setmainfont{IPAexGothic}
-\color{<FORE>}
+<RANDCOLOR>\color{<FORE>}
 \pagecolor{<BACK>}
 \begin{document}
 \fontsize{32pt}{32pt}\selectfont
@@ -152,14 +174,19 @@ do
 ]]
 
   function make_source(name)
-    local src, c
+    local randcolor, src, c = ''
     if name:lower():match('duck') then
       src, c = source_duck, merged(color_duck, color)
     else
       src, c = source_snowman, merged(color_snowman, color)
     end
+    if concat({c.muffler, c.fore, c.back}, ' '):match('random') then
+      randcolor = ("\\definecolor{random}{rgb}{%.3f,%.3f,%.3f}\n")
+          :format(random_color())
+    end
     return (src:gsub('<(%w+)>', {
-      NAME = name, MUFFLER = c.muffler, FORE = c.fore, BACK = c.back
+      NAME = name, MUFFLER = c.muffler, FORE = c.fore, BACK = c.back,
+      RANDCOLOR = randcolor
     }))
   end
 
