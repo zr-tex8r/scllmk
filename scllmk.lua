@@ -9,8 +9,8 @@
 -- This package is distributed under the MIT License.
 --
 prog_name = 'scllmk'
-version = '0.4.0'
-mod_date = "2018-07-29"
+version = '0.5.0'
+mod_date = '2018-09-02'
 ---------------------------------------- global parameters
 verbose = 0
 in_files = nil
@@ -265,9 +265,9 @@ Options:
   -D, --debug           Activate all debug output (equal to "--debug=all").
   -d CAT, --debug=CAT   Activate debug output restricted to CAT.
 
-  -m COLOR, --muffler=COLOR Set muffler color.
-  -b COLOR, --back=COLOR    Set background color.
-  -f COLOR, --fore=COLOR    Set foreground color.
+  --muffler=COLOR       Set muffler color.
+  --back=COLOR          Set background color.
+  --fore=COLOR          Set foreground color.
 
 Please report bugs to <https://github.com/zr-tex8r/scllmk/issues>.
 ]]):format(prog_name))
@@ -350,11 +350,11 @@ This is free software: you are free to change and redistribute it.
         verbose = -1
       elseif key == 'v' or key == 'verbose' then
         verbose = 1
-      elseif key == 'm' or key == 'muffler' then
+      elseif key == 'muffler' then
         color.muffler = sanitize_color(required(val))
-      elseif key == 'f' or key == 'fore' then
+      elseif key == 'fore' then
         color.fore = sanitize_color(required(val))
-      elseif key == 'b' or key == 'back' then
+      elseif key == 'back' then
         color.back = sanitize_color(required(val))
       else
         abort(es_err, "unknown option: %s", option)
