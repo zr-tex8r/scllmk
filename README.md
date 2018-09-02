@@ -1,3 +1,5 @@
+![scllmk: SC Light LaTeX Make](./doc/logo.png)
+
 SCllmk: SC-Variant of [llmk] (the Light LaTeX Make)
 ---------------------------------------------------
 
