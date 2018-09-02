@@ -14,7 +14,11 @@
 %
 % [programs.tex2img]
 % command = "tex2img"
-% opt = '--latex=lualatex --resolution=60 --margins "500 50"'
+% opt = [
+%   "--latex=lualatex --resolution=60",
+%   '--margins "500 50"',                 # for title
+%   #"--keep-page-size --no-transparent",  # for icon (square)
+% ]
 % arg = ["%T", "%B.png"]
 % +++
 
@@ -30,12 +34,12 @@
 
 % ----- colors -----
 \usepackage{xcolor}
-% paleturquoise (RGB: 169, 255, 242; CMYK: 23, 0, 12, 0)
-\definecolor{color1}{RGB}{169, 255, 242}
+% paleturquoise (RGB: 143, 229, 216; CMYK: 38, 0, 6, 10)
+\definecolor{color1}{RGB}{143, 229, 216}
 % symphony blue (RGB: 24, 87, 227; CMYK: 92, 63, 0, 0)
 \definecolor{color2}{RGB}{24, 87, 227}
 % obaku (RGB: 255, 242, 127; CMYK: 1, 5, 62, 0)
-\definecolor{color3}{RGB}{255, 242, 127}
+\definecolor{color3}{RGB}{255, 239, 95}
 
 % ----- tikz -----
 \usepackage{tikz,scsnowman}
