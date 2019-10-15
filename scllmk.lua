@@ -209,7 +209,7 @@ do
   end
 
   local function run(command)
-    info("Running %s", command)
+    info("Running command: %s", command)
     local ok, r1, r2 = os.execute(command)
     if type(ok) == 'number' then return ok end
     return (not ok and r2 == 0) and 1 or r2
@@ -222,12 +222,12 @@ do
       info("No file \"%s\" found (that's no matter).", pname)
     end
 
-    local pbase = pname:gsub('%.%w+$', '')
+    local pbase = pname:gsub('%.[^%./\\]*$', '')
     local fbase = pbase:gsub('^.*[/\\]', ''):gsub('[\128-\255]', '?')
     local tbase = get_temp_base()
     debug('zr', "temp base = \"%s\", base = \"%s\"", tbase, fbase)
 
-    info("Begining a sequence for \"%s\"", pname)
+    info("Beginning a sequence for \"%s\"", pname)
     write_whole(tbase..'.tex', make_source(fbase))
     local cmd = "lualatex -halt-on-error -interaction=nonstopmode"..
         " -no-shell-escape "..tbase
