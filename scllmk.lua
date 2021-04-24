@@ -9,10 +9,11 @@
 -- This package is distributed under the MIT License.
 --
 prog_name = 'scllmk'
-version = '0.6.1'
-mod_date = '2020-06-28'
+version = '0.7.0'
+mod_date = '2020-08-07'
 ---------------------------------------- global parameters
 verbose = 0
+silent = false
 in_files = nil
 color = {}
 color_snowman = {
@@ -200,7 +201,7 @@ do
     if not temp_base then
       for i = 1, 99 do
         local ok, b = true, ("%s_%02d"):format(default_name, i)
-        for _, e in ipairs{'.tex', '.aux', '.log', '.pdf'} do
+        for _, e in ipairs{'.tex', '.aux', '.log', '.pdf', '.out', '.err'} do
           if lfs.attributes(b..e, 'ino') then ok = false end
         end
         if ok then temp_base = b; break end
@@ -211,7 +212,15 @@ do
 
   local function run(command)
     info("Running command: %s", command)
-    local ok, r1, r2 = os.execute(command)
+    local ok, r1, r2
+    if silent then
+      local t = get_temp_base()
+      local redirect = ' 1>'..t..'.out 2>'..t..'.err'
+      ok, r1, r2 = os.execute(command..redirect)
+      os.remove(t..'.out'); os.remove(t..'.err')
+    else
+      ok, r1, r2 = os.execute(command)
+    end
     if type(ok) == 'number' then return ok end
     return (not ok and r2 == 0) and 1 or r2
   end
@@ -293,6 +302,7 @@ Options:
   -h, --help            Print this help message.
   -V, --version         Print the version number.
 
+  -s, --silent          Silence messages from called programs.
   -q, --quiet           Suppress warnings and most error messages.
   -v, --verbose         Print additional information.
   -D, --debug           Activate all debug output (equal to "--debug=all").
@@ -363,7 +373,7 @@ This is free software: you are free to change and redistribute it.
   end
 
   local function read_option()
-    local opt, files = getopt(arg, 'dmfb')
+    local opt, files = getopt(arg, 'd')
     local action = nil
     for _, key, val in pairs(opt) do
       local option = ((#key > 1) and '--' or '-')..key
@@ -390,6 +400,8 @@ This is free software: you are free to change and redistribute it.
         verbose = -1
       elseif key == 'v' or key == 'verbose' then
         verbose = 1
+      elseif key == 's' or key == 'silent' then
+        silent = true
       elseif key == 'muffler' then
         color.muffler = sanitize_color(required(val))
       elseif key == 'fore' then
