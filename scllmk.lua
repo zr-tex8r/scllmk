@@ -242,9 +242,9 @@ do
 
   local function prepare(pname)
     if lfs.isfile(pname) then
-      debug('config', "Fetching NOTHING from the file \"%s\".", pname)
+      debug('config', "NOT Looking for config in the file \"%s\"", pname)
     else
-      info("No file \"%s\" found (that's no matter).", pname)
+      info("Source file \"%s\" does not exist (that's no matter)", pname)
     end
 
     local pbase = pname:gsub('%.[^%./\\]*$', '')
@@ -279,17 +279,23 @@ do
 
   local function remove(pname)
     if not lfs.isfile(pname) then return end
+    if dry_run then
+      dryinfo("removing file \""..pname.."\"")
+      return
+    end
     if remove_file(pname) then
-      info("%s has been removed successfully.", pname)
+      info("Removed \"%s\"", pname)
     else
-      errorlog("failed to remove %s.", pname)
+      errorlog("Failed to remove \"%s\"", pname)
     end
   end
 
   local function process_clean(pname, pbase)
+    info("Begining cleaning for \"%s\"", pname)
     remove(pbase..'.log')
   end
   local function process_clobber(pname, pbase)
+    info("Begining clobbering for \"%s\"", pname)
     remove(pbase..'.log')
     remove(pbase..'.pdf')
   end
