@@ -2,15 +2,15 @@
 --
 -- This is file 'scllmk.lua'.
 --
--- Copyright (c) 2018-2019 Takayuki YATO (aka. "ZR")
+-- Copyright (c) 2018-2021 Takayuki YATO (aka. "ZR")
 --   GitHub:   https://github.com/zr-tex8r
 --   Twitter:  @zr_tex8r
 --
 -- This package is distributed under the MIT License.
 --
 prog_name = 'scllmk'
-version = '0.7.0'
-mod_date = '2020-08-07'
+version = '0.8.0'
+mod_date = '2021-04-24'
 ---------------------------------------- global parameters
 verbose = 0
 dry_run = false
